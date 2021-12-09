@@ -182,13 +182,3 @@ bool BinarySTree<T>::isEmpty() const
 {
     return root == nullptr;
 }
-
-template <typename T>
-const T& BinarySTree<T>::next(const T& value) const
-{
-    auto curr = next(value, root);
-    if (root == nullptr) {
-        throw std::range_error("tree is empty");
-    }
-    return *curr->value;
-}
