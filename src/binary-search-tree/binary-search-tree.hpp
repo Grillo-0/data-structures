@@ -20,6 +20,7 @@ public:
     bool contains(const T& value) const;
     bool isEmpty() const;
 
+    void print(std::ostream& out = std::cout) const;
 
     BinarySTree& operator=(const BinarySTree&);
     BinarySTree& operator=(BinarySTree&&) = default;
@@ -51,6 +52,7 @@ private:
     std::shared_ptr<Node> findMin(std::shared_ptr<Node> root) const;
     bool contains(const T& value, std::shared_ptr<Node> root) const;
 
+    void print(std::ostream& out, std::shared_ptr<Node> root) const;
 
     std::shared_ptr<Node> copy(std::shared_ptr<Node> root) const;
 
@@ -262,4 +264,27 @@ template <typename T>
 bool BinarySTree<T>::isEmpty() const
 {
     return root == nullptr;
+}
+
+template <typename T>
+void BinarySTree<T>::print(std::ostream& out) const
+{
+    out << "digraph {" << std::endl;
+    print(out, root);
+    out << "}" << std::endl;
+}
+
+template <typename T>
+void BinarySTree<T>::print(std::ostream& out, std::shared_ptr<Node> root) const
+{
+    if (root == nullptr)
+        return;
+
+    if (root->left != nullptr)
+        out << *root->value << "->" << *root->left->value << std::endl;
+    if (root->right != nullptr)
+        out << *root->value << "->" << *root->right->value << std::endl;
+
+    print(out, root->left);
+    print(out, root->right);
 }

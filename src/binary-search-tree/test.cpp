@@ -63,3 +63,19 @@ TEST_F(BinarySearchTreeTest, InOrdIterator)
         EXPECT_EQ(it, ptr[i++]);
     }
 }
+
+TEST_F(BinarySearchTreeTest, PrintTree)
+{
+
+    std::stringstream check;
+    check << "digraph {" << std::endl;
+    for (int i = 8; i < 11; ++i) {
+        check << i - 1 << "->" << i << std::endl;
+        tree.insert(i);
+    }
+    check << "}" << std::endl;
+
+    std::stringstream result;
+    tree.print(result);
+    EXPECT_EQ(check.str(), result.str());
+}
