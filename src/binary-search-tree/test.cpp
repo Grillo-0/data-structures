@@ -50,3 +50,16 @@ TEST_F(BinarySearchTreeTest, FindMin)
     tree.insert(9);
     EXPECT_EQ(tree.findMin(), 4);
 }
+
+TEST_F(BinarySearchTreeTest, InOrdIterator)
+{
+    const int ptr[] = { 4, 7, 8, 9 };
+
+    tree.insert(8);
+    tree.insert(4);
+    tree.insert(9);
+    int i = 0;
+    for (auto it : tree) {
+        EXPECT_EQ(it, ptr[i++]);
+    }
+}

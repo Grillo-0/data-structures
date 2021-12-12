@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory>
+#include <stack>
 
 template <typename T>
 class BinarySTree {
@@ -52,6 +53,86 @@ private:
 
 
     std::shared_ptr<Node> copy(std::shared_ptr<Node> root) const;
+
+public:
+    struct inOrdIterator {
+        using iterator_category = std::forward_iterator_tag;
+        using diference_type = std::ptrdiff_t;
+        using value_type = T;
+        using pointer = T*;
+        using reference = T&;
+
+        inOrdIterator(std::shared_ptr<Node> root)
+        {
+            leftPush(root);
+        }
+
+        reference operator*()
+        {
+            return *(m_stack.top()->value);
+        }
+
+        pointer operator->()
+        {
+            return m_stack.top()->value;
+        }
+
+        inOrdIterator& operator++()
+        {
+            (*this)++;
+            return *this;
+        }
+
+        inOrdIterator operator++(int)
+        {
+            std::shared_ptr<Node> curr = m_stack.top();
+            m_stack.pop();
+
+            if (curr->right != nullptr) {
+                leftPush(curr->right);
+            }
+
+            return curr;
+        }
+
+        friend bool operator==(const inOrdIterator& lhs, const inOrdIterator& rhs)
+        {
+            if (lhs.m_stack.size() == 0 || rhs.m_stack.size() == 0) {
+                return lhs.m_stack.size() != rhs.m_stack.size();
+            }
+            return lhs.m_stack.top()->value != rhs.m_stack.top()->value;
+        }
+
+        friend bool operator!=(const inOrdIterator& lhs, const inOrdIterator& rhs)
+        {
+
+            if (lhs.m_stack.size() == 0 || rhs.m_stack.size() == 0) {
+                return lhs.m_stack.size() != rhs.m_stack.size();
+            }
+            return lhs.m_stack.top()->value != rhs.m_stack.top()->value;
+        }
+
+    private:
+        std::stack<std::shared_ptr<Node>> m_stack;
+
+        void leftPush(std::shared_ptr<Node> root)
+        {
+            while (root != nullptr) {
+                m_stack.push(root);
+                root = root->left;
+            }
+        }
+    };
+
+    inOrdIterator begin()
+    {
+        return inOrdIterator(root);
+    }
+
+    inOrdIterator end()
+    {
+        return inOrdIterator(nullptr);
+    }
 };
 
 template <typename T>
