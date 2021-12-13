@@ -274,9 +274,8 @@ void AVLTree<T>::remove(const T& value, std::shared_ptr<Node>& root)
     } else if (value > *root->value) {
         remove(value, root->right);
     } else if (root->left != nullptr && root->right != nullptr) {
-        auto minPtr = findMin(root->right);
-        *root->value = *minPtr->value;
-        minPtr = minPtr->left;
+        *root->value = *findMin(root->right)->value;
+        remove(*root->value, root->right);
     } else {
         root = root->left == nullptr ? root->right : root->left;
     }
